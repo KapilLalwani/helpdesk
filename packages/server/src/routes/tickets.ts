@@ -1,36 +1,15 @@
 import { Router, type Request, type Response } from "express";
-import type { Ticket, CreateTicketBody, UpdateTicketBody } from "../types/ticket.ts";
-import { randomUUID } from "crypto";
+import prisma from "../db.js";
 
 const router = Router();
 
-const tickets: Ticket[] = [
-  {
-    id: randomUUID(),
-    title: "Login page crashes on mobile",
-    description: "Users report a white screen after tapping the login button on iOS Safari.",
-    status: "open",
-    priority: "high",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    id: randomUUID(),
-    title: "Export to CSV broken",
-    description: "The export button in the reports section produces an empty file.",
-    status: "in_progress",
-    priority: "medium",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-router.get("/", (_req: Request, res: Response) => {
+router.get("/", async (_req: Request, res: Response) => {
+  const tickets = await prisma.ticket.findMany({ orderBy: { createdAt: "desc" } });
   res.json(tickets);
 });
 
-router.get("/:id", (req: Request, res: Response) => {
-  const ticket = tickets.find((t) => t.id === req.params.id);
+router.get("/:id", async (req: Request, res: Response) => {
+  const ticket = await prisma.ticket.findUnique({ where: { id: req.params.id } });
   if (!ticket) {
     res.status(404).json({ error: "Ticket not found" });
     return;
@@ -38,47 +17,33 @@ router.get("/:id", (req: Request, res: Response) => {
   res.json(ticket);
 });
 
-router.post("/", (req: Request, res: Response) => {
-  const body = req.body as CreateTicketBody;
-  if (!body.title || !body.description) {
+router.post("/", async (req: Request, res: Response) => {
+  const { title, description, status, priority } = req.body;
+  if (!title || !description) {
     res.status(400).json({ error: "title and description are required" });
     return;
   }
-  const ticket: Ticket = {
-    id: randomUUID(),
-    title: body.title,
-    description: body.description,
-    status: body.status ?? "open",
-    priority: body.priority ?? "medium",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  tickets.push(ticket);
+  const ticket = await prisma.ticket.create({
+    data: { title, description, status, priority },
+  });
   res.status(201).json(ticket);
 });
 
-router.patch("/:id", (req: Request, res: Response) => {
-  const index = tickets.findIndex((t) => t.id === req.params.id);
-  if (index === -1) {
+router.patch("/:id", async (req: Request, res: Response) => {
+  const { title, description, status, priority } = req.body;
+  const ticket = await prisma.ticket.update({
+    where: { id: req.params.id },
+    data: { title, description, status, priority },
+  }).catch(() => null);
+  if (!ticket) {
     res.status(404).json({ error: "Ticket not found" });
     return;
   }
-  const updates = req.body as UpdateTicketBody;
-  tickets[index] = {
-    ...tickets[index],
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  };
-  res.json(tickets[index]);
+  res.json(ticket);
 });
 
-router.delete("/:id", (req: Request, res: Response) => {
-  const index = tickets.findIndex((t) => t.id === req.params.id);
-  if (index === -1) {
-    res.status(404).json({ error: "Ticket not found" });
-    return;
-  }
-  tickets.splice(index, 1);
+router.delete("/:id", async (req: Request, res: Response) => {
+  await prisma.ticket.delete({ where: { id: req.params.id } }).catch(() => null);
   res.status(204).send();
 });
 

@@ -1,6 +1,7 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import ticketsRouter from "./routes/tickets.ts";
+import ticketsRouter from "./routes/tickets.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 3000;
@@ -11,6 +12,8 @@ app.use(express.json());
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
+
+app.use("/api/tickets", ticketsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
