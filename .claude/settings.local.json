@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__query-docs",
+      "Bash(bunx prisma *)",
+      "WebFetch(domain:pris.ly)",
+      "Bash(bun run *)",
+      "Bash(kill 2588)",
+      "Bash(pkill -f \"bun run --watch src/index.ts\")",
+      "Bash(PORT=3002 bun run dev:server)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl *)"
+    ]
+  }
+}

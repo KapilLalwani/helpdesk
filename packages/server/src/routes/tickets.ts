@@ -9,7 +9,7 @@ router.get("/", async (_req: Request, res: Response) => {
 });
 
 router.get("/:id", async (req: Request, res: Response) => {
-  const ticket = await prisma.ticket.findUnique({ where: { id: req.params.id } });
+  const ticket = await prisma.ticket.findUnique({ where: { id: String(req.params.id) } });
   if (!ticket) {
     res.status(404).json({ error: "Ticket not found" });
     return;
@@ -32,7 +32,7 @@ router.post("/", async (req: Request, res: Response) => {
 router.patch("/:id", async (req: Request, res: Response) => {
   const { title, description, status, priority } = req.body;
   const ticket = await prisma.ticket.update({
-    where: { id: req.params.id },
+    where: { id: String(req.params.id) },
     data: { title, description, status, priority },
   }).catch(() => null);
   if (!ticket) {
@@ -43,7 +43,7 @@ router.patch("/:id", async (req: Request, res: Response) => {
 });
 
 router.delete("/:id", async (req: Request, res: Response) => {
-  await prisma.ticket.delete({ where: { id: req.params.id } }).catch(() => null);
+  await prisma.ticket.delete({ where: { id: String(req.params.id) } }).catch(() => null);
   res.status(204).send();
 });
 
