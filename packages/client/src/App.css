@@ -128,11 +128,19 @@ textarea { resize: vertical; }
 
 .form-error {
   color: var(--danger);
-  font-size: 0.85rem;
-  background: rgba(239,68,68,0.1);
-  border: 1px solid rgba(239,68,68,0.3);
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+input.input-error,
+textarea.input-error,
+select.input-error {
+  border-color: var(--danger);
+}
+
+input.input-error:focus,
+textarea.input-error:focus,
+select.input-error:focus {
+  border-color: var(--danger);
 }
 
 /* Buttons */
