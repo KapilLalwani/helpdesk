@@ -1,33 +1,32 @@
 import type { TicketStatus, TicketPriority } from "../types/ticket.ts";
+import { Badge } from "@/components/ui/badge";
 
-const statusClasses: Record<TicketStatus, string> = {
-  open: "bg-blue-500/15 text-blue-400",
-  in_progress: "bg-amber-500/15 text-amber-400",
-  resolved: "bg-green-500/15 text-green-400",
-  closed: "bg-slate-500/15 text-slate-400",
+const statusVariant: Record<TicketStatus, "default" | "secondary" | "outline" | "destructive"> = {
+  open: "default",
+  in_progress: "secondary",
+  resolved: "outline",
+  closed: "outline",
 };
 
-const priorityClasses: Record<TicketPriority, string> = {
-  low: "bg-green-500/15 text-green-400",
-  medium: "bg-amber-500/15 text-amber-400",
-  high: "bg-orange-500/15 text-orange-400",
-  critical: "bg-red-500/15 text-red-400",
+const priorityVariant: Record<TicketPriority, "default" | "secondary" | "outline" | "destructive"> = {
+  low: "outline",
+  medium: "secondary",
+  high: "default",
+  critical: "destructive",
 };
-
-const base = "inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold capitalize whitespace-nowrap";
 
 export function StatusBadge({ status }: { status: TicketStatus }) {
   return (
-    <span className={`${base} ${statusClasses[status]}`}>
+    <Badge variant={statusVariant[status]}>
       {status.replace("_", " ")}
-    </span>
+    </Badge>
   );
 }
 
 export function PriorityBadge({ priority }: { priority: TicketPriority }) {
   return (
-    <span className={`${base} ${priorityClasses[priority]}`}>
+    <Badge variant={priorityVariant[priority]}>
       {priority}
-    </span>
+    </Badge>
   );
 }

@@ -14,7 +14,9 @@
       "Bash(taskkill /PID 110396 /F)",
       "Bash(taskkill /PID 47084 /F)",
       "Bash(netstat -ano)",
-      "Bash(bun add *)"
+      "Bash(bun add *)",
+      "Bash(bunx shadcn@latest add form -y)",
+      "Bash(bunx shadcn@latest add badge select textarea -y)"
     ]
   }
 }
