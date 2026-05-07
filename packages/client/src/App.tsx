@@ -1,20 +1,22 @@
-import { useEffect, useState } from "react";
+import "./App.css";
+import { Routes, Route } from "react-router-dom";
+import { ProtectedRoute, PublicRoute } from "./components/ProtectedRoute";
+import { Layout } from "./components/Layout";
+import { LoginPage } from "./components/LoginPage";
+import { HomePage } from "./components/HomePage";
 
 function App() {
-  const [health, setHealth] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("http://localhost:3000/api/health")
-      .then((res) => res.json())
-      .then((data) => setHealth(data.status))
-      .catch(() => setHealth("error"));
-  }, []);
-
   return (
-    <div>
-      <h1>Helpdesk</h1>
-      {health && <p>API status: {health}</p>}
-    </div>
+    <Routes>
+      <Route element={<PublicRoute />}>
+        <Route path="/login" element={<LoginPage />} />
+      </Route>
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
+          <Route path="/*" element={<HomePage />} />
+        </Route>
+      </Route>
+    </Routes>
   );
 }
 

@@ -13,7 +13,8 @@
       "mcp__context7__resolve-library-id",
       "Bash(taskkill /PID 110396 /F)",
       "Bash(taskkill /PID 47084 /F)",
-      "Bash(netstat -ano)"
+      "Bash(netstat -ano)",
+      "Bash(bun add *)"
     ]
   }
 }

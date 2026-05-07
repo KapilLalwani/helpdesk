@@ -9,6 +9,6 @@ export const auth = betterAuth({
   disabledPaths: ["/sign-up/email"],
   baseURL: process.env.BETTER_AUTH_URL,
   secret: process.env.BETTER_AUTH_SECRET,
-  trustedOrigins: ["http://localhost:5173"],
+  trustedOrigins: [process.env.BETTER_AUTH_TRUSTED_ORIGIN ?? "http://localhost:5173"],
   plugins: [admin()],
 });
