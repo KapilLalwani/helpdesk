@@ -9,7 +9,11 @@
       "Bash(pkill -f \"bun run --watch src/index.ts\")",
       "Bash(PORT=3002 bun run dev:server)",
       "Bash(echo \"PID: $!\")",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "mcp__context7__resolve-library-id",
+      "Bash(taskkill /PID 110396 /F)",
+      "Bash(taskkill /PID 47084 /F)",
+      "Bash(netstat -ano)"
     ]
   }
 }
