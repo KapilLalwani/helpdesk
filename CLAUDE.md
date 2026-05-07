@@ -42,16 +42,17 @@ bun run build
 - `types/ticket.ts` — Shared `Ticket`, `TicketStatus`, `TicketPriority`, `CreateTicketBody`, `UpdateTicketBody` types
 
 ### Client (`packages/client/src/`)
-- `App.tsx` — Root component; React Router routes with `ProtectedRoute` / `PublicRoute` guards
+- `App.tsx` — Root component; React Router routes with `ProtectedRoute` / `PublicRoute` / `AdminRoute` guards
 - `hooks/useTickets.ts` — Central data hook: fetches, creates, updates, deletes tickets via `/api/tickets`. All API calls go through this hook.
 - `types/ticket.ts` — Mirrors server types (duplicated manually — no shared package yet)
-- `lib/auth-client.ts` — Better Auth client instance
-- `components/Layout.tsx` — App shell: top nav with sign-out button, renders `<Outlet />`
+- `lib/auth-client.ts` — Better Auth client instance with `adminClient()` plugin (required for `role` on session user type)
+- `components/Layout.tsx` — App shell: top nav with "Users" link (admin only, left side), user name, sign-out button, renders `<Outlet />`
 - `components/LoginPage.tsx` — Auth form using Better Auth `signIn.email`
 - `components/HomePage.tsx` — Ticket list + create form
 - `components/TicketCard.tsx` — Single ticket display with status change and delete
 - `components/TicketBadge.tsx` — `StatusBadge` and `PriorityBadge` using shadcn `Badge`
 - `components/CreateTicketForm.tsx` — New ticket form with react-hook-form + Zod
+- `components/UsersPage.tsx` — Admin-only page at `/users`; currently just a heading
 
 ### API Routes
 | Method | Path | Description |
@@ -83,11 +84,11 @@ The client uses **shadcn/ui** with Tailwind v4. Config is at `packages/client/co
 - `middleware/requireAuth.ts` — Express middleware that validates the session from request headers using `auth.api.getSession`. Attaches the session to `res.locals.session`. Returns `401` if unauthenticated.
 
 ### Client (`packages/client/src/`)
-- `lib/auth-client.ts` — Better Auth React client pointing to `http://localhost:3000`.
+- `lib/auth-client.ts` — Better Auth React client pointing to `http://localhost:3000`. Must include `adminClient()` plugin so `session.user.role` is typed correctly.
 - `authClient.signIn.email({ email, password })` — used in `LoginPage.tsx` to sign in.
 - `authClient.signOut()` — used in `Layout.tsx` to sign out.
 - `authClient.useSession()` — React hook that returns `{ data: session, isPending }`. Used by route guards and the nav bar.
-- `components/ProtectedRoute.tsx` — Redirects to `/login` if no session. `PublicRoute` redirects to `/` if already authenticated.
+- `components/ProtectedRoute.tsx` — `ProtectedRoute`: redirects to `/login` if no session. `PublicRoute`: redirects to `/` if already authenticated. `AdminRoute`: redirects non-admins to `/`, unauthenticated to `/login`.
 
 ### Database schema (Prisma)
 Schema at `packages/server/prisma/schema.prisma`. Better Auth owns these tables: `User`, `Session`, `Account`, `Verification`. Users have a `role` enum: `admin` | `agent` (default: `agent`).
@@ -113,9 +114,10 @@ Run `bun run seed` (from `packages/server`) to create the initial admin user. Cr
 ## Implemented
 - **Auth:** Better Auth with email/password sign-in; session-based, DB-backed; admin plugin; self-registration disabled
 - **Database:** PostgreSQL via Prisma ORM (auth tables live in DB; tickets are still in-memory)
-- **Routing:** React Router v7 with protected/public route guards
+- **Routing:** React Router v7 with `ProtectedRoute`, `PublicRoute`, and `AdminRoute` guards
 - **Styling:** Tailwind CSS v4 + shadcn/ui (neutral theme)
 - **Validation:** react-hook-form + Zod on all forms
+- **Role-based UI:** Admin-only `/users` page; nav link conditionally shown based on `session.user.role`
 
 ## Planned (not yet implemented)
 - **Tickets in DB:** Migrate tickets from in-memory array to Prisma/PostgreSQL
