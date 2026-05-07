@@ -30,7 +30,6 @@ export function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { email: "admin@example.com", password: "Password123" },
   });
 
   async function onSubmit(values: FormValues) {

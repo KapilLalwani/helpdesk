@@ -16,7 +16,10 @@
       "Bash(netstat -ano)",
       "Bash(bun add *)",
       "Bash(bunx shadcn@latest add form -y)",
-      "Bash(bunx shadcn@latest add badge select textarea -y)"
+      "Bash(bunx shadcn@latest add badge select textarea -y)",
+      "Bash(openssl rand *)",
+      "Bash(bun -e \"const bcrypt = await import\\('bcrypt'\\); console.log\\(await bcrypt.hash\\('IwoooV3fihAX6wlb2YZN', 10\\)\\);\")",
+      "Bash(bun -e \"const {hashSync} = await import\\('bcryptjs'\\); console.log\\(hashSync\\('IwoooV3fihAX6wlb2YZN', 10\\)\\);\")"
     ]
   }
 }

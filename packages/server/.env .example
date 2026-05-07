@@ -6,10 +6,10 @@
 # See the documentation for all the connection string options: https://pris.ly/d/connection-strings
 
 DATABASE_URL="postgresql://<username>:<password>@localhost:5432/helpdesk?schema=public"
-BETTER_AUTH_URL="http://localhost:3001"
-BETTER_AUTH_SECRET="change-me"
+BETTER_AUTH_URL="http://localhost:3000"
+BETTER_AUTH_SECRET="OyihbKz3NzLP7hZRt34NCWi4Kt2TUPx9BhGPG73UJ+QHR7gojbtlLQ/S5N55ml0n"
 BETTER_AUTH_TRUSTED_ORIGIN="http://localhost:5173"
 
 SEED_ADMIN_EMAIL="admin@example.com"
-SEED_ADMIN_PASSWORD="Password123"
+SEED_ADMIN_PASSWORD="IwoooV3fihAX6wlb2YZN"
 SEED_ADMIN_NAME="Admin"
