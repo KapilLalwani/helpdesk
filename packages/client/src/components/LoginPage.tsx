@@ -33,35 +33,56 @@ export function LoginPage() {
   }
 
   return (
-    <div className="login-page">
-      <form className="login-form" onSubmit={handleSubmit(onSubmit)}>
-        <h1 className="login-title">Helpdesk</h1>
-        <p className="login-subtitle">Sign in to your account</p>
-        {errors.root && <p className="form-error">{errors.root.message}</p>}
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
+    <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <form
+        className="bg-slate-800 border border-slate-700 rounded-xl p-8 flex flex-col gap-5 w-full max-w-sm"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <h1 className="text-3xl font-bold text-indigo-500 text-center">Helpdesk</h1>
+        <p className="text-sm text-slate-400 text-center -mt-3">Sign in to your account</p>
+
+        {errors.root && (
+          <p className="text-red-500 text-sm">{errors.root.message}</p>
+        )}
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="email" className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+            Email
+          </label>
           <input
             id="email"
             type="email"
             placeholder="you@example.com"
             autoFocus
-            className={errors.email ? "input-error" : undefined}
+            className={`bg-slate-700 border rounded-lg px-3 py-2 text-slate-100 text-sm outline-none transition-colors placeholder:text-slate-500 ${
+              errors.email ? "border-red-500 focus:border-red-500" : "border-slate-600 focus:border-indigo-500"
+            }`}
             {...register("email")}
           />
-          {errors.email && <p className="form-error">{errors.email.message}</p>}
+          {errors.email && <p className="text-red-500 text-xs">{errors.email.message}</p>}
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="password" className="text-xs font-medium text-slate-400 uppercase tracking-wide">
+            Password
+          </label>
           <input
             id="password"
             type="password"
             placeholder="••••••••"
-            className={errors.password ? "input-error" : undefined}
+            className={`bg-slate-700 border rounded-lg px-3 py-2 text-slate-100 text-sm outline-none transition-colors placeholder:text-slate-500 ${
+              errors.password ? "border-red-500 focus:border-red-500" : "border-slate-600 focus:border-indigo-500"
+            }`}
             {...register("password")}
           />
-          {errors.password && <p className="form-error">{errors.password.message}</p>}
+          {errors.password && <p className="text-red-500 text-xs">{errors.password.message}</p>}
         </div>
-        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium text-sm rounded-lg px-4 py-2 transition-colors cursor-pointer"
+        >
           {isSubmitting ? "Signing in…" : "Sign in"}
         </button>
       </form>
