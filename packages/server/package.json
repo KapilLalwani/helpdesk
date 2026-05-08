@@ -7,7 +7,8 @@
     "dev": "bun run --watch src/index.ts",
     "build": "bun build src/index.ts --outdir dist --target bun",
     "typecheck": "tsc --noEmit",
-    "seed": "bun run prisma/seed.ts"
+    "seed": "bun run prisma/seed.ts",
+    "seed:test": "bun --env-file .env.test run prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

@@ -18,18 +18,19 @@ const trustedOrigins = (process.env.BETTER_AUTH_TRUSTED_ORIGIN ?? "http://localh
   .split(",")
   .map((o) => o.trim());
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 20,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
-
 app.use(helmet());
-app.use(limiter);
 app.use(cors({ origin: trustedOrigins, credentials: true }));
 
 // Better Auth handler must come before express.json()
+if (process.env.NODE_ENV === "production") {
+  const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 100,
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use("/api/auth", limiter);
+}
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.json());
