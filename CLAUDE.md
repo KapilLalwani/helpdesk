@@ -115,16 +115,14 @@ Run `bun run seed` (from `packages/server`) to create the initial admin user. Cr
 - **requireAuth:** Must be applied to all non-public routes
 - **requireAdmin:** Use alongside `requireAuth` as `[requireAuth, requireAdmin]` for admin-only routes
 
-## Testing (Playwright)
+## Testing
 
-- Config: `playwright.config.ts` at repo root
-- Tests: `e2e/` directory at repo root (empty — no tests written yet)
-- Browser: Chromium only
-- Test ports: server `3001`, client `5174` (isolated from dev ports 3000/5173)
-- Test database: `helpdesk_test` (separate from dev `helpdesk`)
-- Env file: `packages/server/.env.test` — loaded via `DOTENV_CONFIG_PATH` in Playwright's webServer config
-- Seed test DB: `bun run seed:test` from `packages/server`
-- **Important:** `bun --env-file .env.test` must be used (not `DOTENV_CONFIG_PATH=`) when running scripts targeting the test DB, because Bun doesn't propagate inline env vars to dotenv's config path lookup
+Use the **e2e-test-writer** subagent for all Playwright E2E test writing. Invoke it:
+- After implementing a new feature or UI component
+- When the user explicitly asks for E2E tests
+- After wiring up a new API endpoint to the UI
+
+Do not write E2E tests inline — always delegate to the agent via `Agent({ subagent_type: "agent", description: "...", prompt: "..." })` referencing the `e2e-test-writer` agent defined at `packages/server/.claude/agents/e2e-test-writer.md`.
 
 ## Implemented
 - **Auth:** Better Auth with email/password sign-in; session-based, DB-backed; admin plugin; self-registration disabled
